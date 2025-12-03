@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git - 0 to Pro 参考手册</title>
+    <style>
+        body {
+            font-family: "Microsoft YaHei", "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px;
+            background-color: #fff;
+        }
+        h1 {
+            text-align: center;
+            border-bottom: 3px solid #333;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+        h2 {
+            margin-top: 40px;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 8px;
+            color: #0056b3;
+            font-size: 1.5em;
+        }
+        h3 {
+            margin-top: 20px;
+            color: #444;
+            padding-left: 0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        /* 布局和列 (模拟卡片风格) */
+        .columns {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .col-half {
+            flex: 1;
+            min-width: 45%;
+        }
+
+        /* 代码样式 */
+        code {
+            font-family: Consolas, "Courier New", monospace;
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #d63384; 
+            font-weight: bold;
+        }
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: Consolas, "Courier New", monospace;
+            margin: 10px 0;
+        }
+
+        /* 表格样式 (用于模拟命令卡片) */
+        .ref-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9em;
+            table-layout: fixed;
+        }
+        .ref-table th, .ref-table td {
+            border: 1px solid #e1e4e8;
+            padding: 8px 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .ref-table th {
+            background-color: #f6f8fa;
+            font-weight: bold;
+            color: #24292e;
+        }
+        .ref-table td:first-child {
+            font-family: Consolas, "Courier New", monospace;
+            font-weight: bold;
+            background-color: #f9f9f9;
+            color: #000;
+        }
+
+        /* 提示框样式 */
+        .note {
+            background-color: #fff8c5;
+            border-left: 5px solid #d4a72c;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        /* 视觉流图模拟 */
+        .flow-diagram {
+            background-color: #e6f7ff;
+            border: 1px solid #91d5ff;
+            padding: 10px;
+            margin: 15px 0;
+            text-align: center;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .flow-diagram .step { margin: 5px 0; font-weight: bold; }
+        .flow-diagram .arrow { font-size: 1.2em; color: #1890ff; font-weight: bold;}
+
+        /* GitHub UI 模拟 */
+        .github-ui {
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            padding: 15px;
+            background-color: #f6f8fa;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        .github-ui .conflict {
+            background-color: #ffeef0;
+            color: #cb2431;
+            padding: 10px;
+            border: 1px solid #f9cccf;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .github-ui button {
+            background-color: #2c974b;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .github-ui .info {
+            color: #586069;
+            margin-bottom: 10px;
+        }
+
+        /* 打印优化 */
+        @media print {
+            body { padding: 0; max-width: 100%; }
+            h2, h3 { page-break-after: avoid; }
+            pre, .ref-table, .github-ui, .flow-diagram, .columns { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Git - 0 to Pro 参考手册</h1>
+    <p style="text-align: center; color: #666;">By: willing |</p>
+
+    <h2>1. 基础命令 (Command Line & Git Basics)</h2>
+    
+    <div class="columns">
+        <div class="col-half">
+            <h3>命令行操作 (Terminal / PowerShell)</h3>
+            <ul>
+                <li><code>cd ~/Desktop/folder</code>: 更改命令行当前运行的文件夹。</li>
+                <li><code>ls</code> (或 <code>dir</code>): 列出当前文件夹中的文件和文件夹。</li>
+            </ul>
+
+            <div class="note">
+                <strong>注意：</strong> git 命令必须在包含所有代码的文件夹内运行。
+            </div>
+            
+            <h3>配置提交信息</h3>
+            <p>配置用于提交的姓名和邮箱：</p>
+            <ul>
+                <li><code>git config --global user.name "Your Name"</code></li>
+                <li><code>git config --global user.email "email@example.com"</code></li>
+            </ul>
+
+        </div>
+        <div class="col-half">
+            <h3>创建提交 (Creating Commits)</h3>
+            <p>在 Git 中，**版本 (version) = 提交 (commit)**。<br>
+            **版本历史 (Version history) = 提交历史 (commit history)**。</p>
+
+            <table class="ref-table">
+                <tr>
+                    <td><code>git init</code></td>
+                    <td>Git 将开始追踪所有更改。</td>
+                </tr>
+                <tr>
+                    <td><code>git status</code></td>
+                    <td>显示自上次提交以来的所有更改。</td>
+                </tr>
+                <tr>
+                    <td><code>git add &lt;file|folder&gt;</code></td>
+                    <td>挑选更改以放入下一次提交中。</td>
+                </tr>
+                <tr>
+                    <td><code>git add .</code></td>
+                    <td>挑选所有文件 (在当前运行文件夹)。</td>
+                </tr>
+                <tr>
+                    <td><code>git commit -m "msg"</code></td>
+                    <td>创建一个附带消息的提交。</td>
+                </tr>
+                <tr>
+                    <td><code>git commit -m "msg" --amend</code></td>
+                    <td>更新上一次提交而不是创建新的。</td>
+                </tr>
+                <tr>
+                    <td><code>git log</code></td>
+                    <td>查看提交历史。</td>
+                </tr>
+                <tr>
+                    <td><code>git log --all --graph</code></td>
+                    <td>在命令行中以可视化的方式显示分支结构。</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <h2>2. 工作区与历史 (Working Area & History)</h2>
+
+    <div class="columns">
+        <div class="col-half">
+            <h3>工作区 vs 暂存区</h3>
+            <div class="flow-diagram">
+                <div class="step">Working Area (工作区)</div>
+                <div class="arrow">⬇︎ git add &lt;file|folder&gt;</div>
+                <div class="step">Staging Area (暂存区)</div>
+                <div class="arrow">⬇︎ git commit -m "..."</div>
+                <div class="step">Commit History (提交历史)</div>
+            </div>
+            
+            <table class="ref-table">
+                <tr>
+                    <td><code>git add &lt;file&gt;</code></td>
+                    <td>工作区 => 暂存区</td>
+                </tr>
+                <tr>
+                    <td><code>git commit -m "..."</code></td>
+                    <td>暂存区 => 提交历史</td>
+                </tr>
+                <tr>
+                    <td><code>git reset &lt;file&gt;</code></td>
+                    <td>暂存区 => 工作区 (撤销暂存)</td>
+                </tr>
+                <tr>
+                    <td><code>git checkout &lt;file&gt;</code></td>
+                    <td>工作区 => 移除更改 (丢弃修改)</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-half">
+            <h3>查看与恢复文件 (Restoring)</h3>
+            <p><strong>HEAD</strong> 指向当前工作的分支或提交。</p>
+
+            <table class="ref-table">
+                <tr>
+                    <td><code>git checkout &lt;hash|branch&gt;</code></td>
+                    <td>切换到指定的提交或分支。</td>
+                </tr>
+                <tr>
+                    <td><code>git checkout &lt;hash&gt; &lt;file&gt;</code></td>
+                    <td>将单个文件内容恢复到之前的提交状态。</td>
+                </tr>
+                <tr>
+                    <td><code>git checkout &lt;hash&gt; folder/</code></td>
+                    <td>恢复文件夹内的所有文件。</td>
+                </tr>
+                <tr>
+                    <td><code>git checkout &lt;hash&gt; .</code></td>
+                    <td>恢复项目中的所有文件。</td>
+                </tr>
+            </table>
+            
+            <h3>其他功能</h3>
+            <ul>
+                <li><strong>别名:</strong> <code>git config --global alias.s "status"</code></li>
+                <li><strong>.gitignore:</strong> 告诉 git 哪些文件/文件夹不应该被追踪。</li>
+                <li><strong>移除 Git:</strong> <code>rm -rf .git</code> (从项目中移除 git 追踪)。</li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>3. GitHub 与远程仓库 (GitHub & Remotes)</h2>
+    
+    <div class="columns">
+        <div class="col-half">
+            <h3>上传代码 (Uploading)</h3>
+            <p><strong>远程仓库 (Remote)</strong> 用于线上备份代码。</p>
+            
+            <table class="ref-table">
+                <tr>
+                    <td><code>git remote add &lt;name&gt; &lt;url&gt;</code></td>
+                    <td>链接本地仓库到远程仓库 (如 <code>git remote add origin ...</code>)。</td>
+                </tr>
+                <tr>
+                    <td><code>git push &lt;remote&gt; &lt;branch&gt;</code></td>
+                    <td>将分支上传到远程仓库 (如 <code>git push origin main</code>)。</td>
+                </tr>
+                <tr>
+                    <td><code>git push -u origin main</code></td>
+                    <td>设置上游快捷方式，下次只需 <code>git push</code>。</td>
+                </tr>
+                <tr>
+                    <td><code>git push origin main -f</code></td>
+                    <td><strong>强制推送</strong> (会覆盖远程仓库内容)。</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-half">
+            <h3>下载与同步 (Downloading & Syncing)</h3>
+            <table class="ref-table">
+                <tr>
+                    <td><code>git clone &lt;url&gt;</code></td>
+                    <td>下载远程仓库。</td>
+                </tr>
+                <tr>
+                    <td><code>git remote -v</code></td>
+                    <td>列出所有远程仓库的详细信息。</td>
+                </tr>
+                <tr>
+                    <td><code>git fetch</code></td>
+                    <td>更新所有远程追踪分支，查看远程仓库的样子。</td>
+                </tr>
+                <tr>
+                    <td><code>git pull &lt;remote&gt; &lt;branch&gt;</code></td>
+                    <td>下载远程分支的新提交，并更新本地分支 (Fetch + Merge)。</td>
+                </tr>
+            </table>
+            <div class="note" style="border-left-color: #6a0dad;">
+                <strong>[此区域模拟了原始 PDF 中本地与远程仓库交互的图示]</strong><br>
+                图示了 Local Repo、Remote Repo、Pull 和 Push 的概念关系。
+            </div>
+        </div>
+    </div>
+
+    <h2>4. 分支与合并 (Branching & Merging)</h2>
+
+    <div class="columns">
+        <div class="col-half">
+            <h3>分支 (Branching)</h3>
+            <p>分支 = 创建版本历史的副本，以便并行开发新功能。</p>
+            <table class="ref-table">
+                <tr>
+                    <td><code>git branch &lt;name&gt;</code></td>
+                    <td>创建一个新分支。</td>
+                </tr>
+                <tr>
+                    <td><code>git checkout &lt;name&gt;</code></td>
+                    <td>切换到另一个分支。</td>
+                </tr>
+                <tr>
+                    <td><code>git branch -D &lt;name&gt;</code></td>
+                    <td>删除一个分支。</td>
+                </tr>
+            </table>
+            
+            <h3>合并 (Merging)</h3>
+            <p>命令：<code>git merge &lt;branch_name&gt; -m "message"</code></p>
+            <p>步骤：1. <code>git checkout main</code> (切换到目标分支)。2. <code>git merge feature1</code> (合并另一个分支)。</p>
+        </div>
+        <div class="col-half">
+            <h3>解决合并冲突 (Merge Conflicts)</h3>
+            
+            <p>冲突标记示例：</p>
+            <pre>
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+code1 (当前分支的代码)
+=======
+code2 (合并进来的分支的代码)
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; branch
+</pre>
+            <p><strong>解决步骤：</strong></p>
+            <ol>
+                <li>删除所有标记符号，只保留想要的最终代码。</li>
+                <li>提交更改：<code>git add .</code> 然后 <code>git commit -m "message"</code>。</li>
+            </ol>
+        </div>
+    </div>
+
+    <h2>5. 功能分支工作流 (Feature Branch Workflow)</h2>
+    <p>公司开发新功能的常用流程：</p>
+
+    <div class="columns">
+        <div class="col-half">
+            <h3>工作流步骤</h3>
+            <ol>
+                <li>**创建分支：** <code>git branch new-feature</code> -> <code>git checkout new-feature</code></li>
+                <li>**开发与提交：** 修改代码并提交。</li>
+                <li>**上传：** <code>git push origin new-feature</code></li>
+                <li>**创建 PR：** 在 GitHub 网页上发起 Pull Request (用于代码审查)。</li>
+                <li>**合并：** 在 GitHub 上点击 "Merge pull request"。</li>
+                <li>**更新本地：** 同步本地 <code>main</code> 分支：
+                    <pre>git checkout main
+git pull origin main</pre>
+                </li>
+            </ol>
+        </div>
+        <div class="col-half">
+            <h3>工作流中的冲突解决</h3>
+            
+            <h4>方法 1: 在 GitHub 网页上解决</h4>
+            <div class="github-ui">
+                <div class="conflict">
+                    ⚠︎ This branch has conflicts that must be resolved
+                </div>
+                <div class="info">
+                    Use the web editor or the command line to resolve conflicts.
+                </div>
+                <button style="background-color: #007bff;">Resolve conflicts</button>
+                <button>Merge pull request</button>
+            </div>
+
+            <h4>方法 2: 在本地电脑上解决 (推荐)</h4>
+            <ol>
+                <li>**获取 main：** <code>git checkout main</code> -> <code>git pull origin main</code></li>
+                <li>**获取 feature：** <code>git checkout feature4</code> -> <code>git pull origin feature4</code></li>
+                <li>**将 main 合并进 feature：** <pre>git checkout feature4
+git merge master</pre>
+                    <em>(注意合并方向：将 merge commit 保留在 feature 分支上供队友审查)</em>
+                </li>
+                <li>**推送：** 解决冲突后，<code>git push origin feature4</code>。</li>
+            </ol>
+        </div>
+    </div>
+    
+    <div style="margin-top: 40px; border-top: 1px solid #ccc; padding-top: 15px; font-size: 0.9em; color: #666;">
+        <p><strong>[原始 PDF 第 8 页尾部信息]</strong></p>
+        <div class="github-ui" style="background-color: #e6ffed; border-color: #b7eb8f;">
+            <p style="color: #237804; font-weight: bold;">This branch has no conflicts with the base branch</p>
+            <p>Merging can be performed automatically.</p>
+            <button>Merge pull request</button>
+        </div>
+        <p>Continuous integration has not been set up. GitHub Actions and several other apps can be used to automatically test code changes.</p>
+    </div>
+
+</body>
+</html>
